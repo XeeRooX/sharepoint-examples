@@ -57,6 +57,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sharepoint\SPListProcessing.cs" />
+    <Compile Include="Sharepoint\SPPropertyHelper.cs" />
     <Compile Include="TimerJobs\CleanListJob.cs" />
   </ItemGroup>
   <ItemGroup>

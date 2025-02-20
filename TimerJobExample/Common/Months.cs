@@ -9,6 +9,7 @@ namespace TimerJobExample.Common
     [Flags]
     public enum Months
     {
+        None = 0,
         January = 1,
         February = 2,
         March = 4,

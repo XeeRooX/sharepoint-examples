@@ -12,9 +12,24 @@ namespace TimerJobExample.Common
         {
             var result = Enum.GetValues(months.GetType())
                 .Cast<Enum>().Where(months.HasFlag)
-                .Select(x => Array.IndexOf(Enum.GetValues(typeof(Months)), x) + 1);
+                .Select(x => Array.IndexOf(Enum.GetValues(typeof(Months)), x) + 1)
+                .Where(x => x != 0);
 
             return result;
         }
+
+        public static Months ParseAndReplace(string months)
+        {
+            try
+            {
+                return (Months)Enum.Parse(typeof(Months), months);
+            }
+            catch
+            {
+                return Months.None;
+            }
+
+        }
+
     }
 }
