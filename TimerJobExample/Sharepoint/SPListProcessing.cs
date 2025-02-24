@@ -32,6 +32,26 @@ namespace TimerJobExample.Sharepoint
             web.ProcessBatchData(batchString.ToString());
         }
 
+        internal static void CleanList(SPList list, SPWeb web)
+        {
+            var listGuid = list.ID.ToString();
+
+            StringBuilder batchString = new StringBuilder();
+            batchString.Append("<?xml version=\"1.0\" encoding=\"UTF-8\"?><Batch>");
+
+            foreach (SPListItem item in list.Items)
+            {
+                batchString.Append("<Method>");
+                batchString.Append($"<SetList Scope=\"Request\">{listGuid}</SetList>");
+                batchString.Append("<SetVar Name=\"ID\">" + Convert.ToString(item.ID) + "</SetVar>");
+                batchString.Append("<SetVar Name=\"Cmd\">Delete</SetVar>");
+                batchString.Append("</Method>");
+            }
+
+            batchString.Append("</Batch>");
+            web.ProcessBatchData(batchString.ToString());
+        }
+
         /// <summary>
         /// Возвращает список элементов списка SharePoint из постраничной выборки.
         /// </summary>
