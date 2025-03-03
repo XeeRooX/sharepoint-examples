@@ -45,7 +45,7 @@ namespace TimerJobExample.TimerJobs
             }
         }
 
-        private void BatchCreateOrders(IEnumerable<SPListItem> items, SPWeb web, SPList ordersBackupList)
+        private void BatchCreateOrders(IEnumerable<SPListItem> items, SPWeb web, SPList ordersBackupList, SPList ordersList)
         {
             var copyFields = new List<string>() { "date", "status", "code", "name", "supervisor", "manager", "order" };
             var ordersBackupListGuid = ordersBackupList.ID.ToString();
@@ -57,6 +57,8 @@ namespace TimerJobExample.TimerJobs
 
             var methodId = 1;
 
+
+
             foreach (SPListItem item in items)
             {
                 
@@ -66,24 +68,44 @@ namespace TimerJobExample.TimerJobs
                 batchCreate.Append("<SetVar Name=\"ID\">New</SetVar>");
                 batchCreate.Append("<SetVar Name=\"Cmd\">Save</SetVar>");
 
-                foreach (var field in copyFields)
+                var fieldsNames = GetNonSystemFieldsNames(ordersList, ordersBackupList);
+
+                foreach (var field in fieldsNames)
                 {
+
                     var value = item[field] == null ? "&nbsp;" : item[field].ToString()
                         .Replace("&", "&amp")
                         .Replace("\"", "&quot;");
 
-                    if(field == "date")
+                    if (field == "date")
                     {
                         value = SPUtility.CreateISO8601DateTimeFromSystemDateTime(DateTime.Parse(value));
                         Console.WriteLine();
                     }
 
-                    //if (field == "order")
-                    //    field = "order0";
 
-                    batchCreate.Append($"<SetVar Name=\"urn:schemas-microsoft-com:office:office#{(field == "order" ? "order0" : field)}\">{value}</SetVar>");
+                    batchCreate.Append($"<SetVar Name=\"urn:schemas-microsoft-com:office:office#{field}\">{value}</SetVar>");
                     //batchCreate.Append($"<SetVar Name=\"{field}\">{value}</SetVar>");
-                }     
+                }
+
+                //foreach (var field in copyFields)
+                //{
+                //    var value = item[field] == null ? "&nbsp;" : item[field].ToString()
+                //        .Replace("&", "&amp")
+                //        .Replace("\"", "&quot;");
+
+                //    if(field == "date")
+                //    {
+                //        value = SPUtility.CreateISO8601DateTimeFromSystemDateTime(DateTime.Parse(value));
+                //        Console.WriteLine();
+                //    }
+
+                //    //if (field == "order")
+                //    //    field = "order0";
+
+                //    batchCreate.Append($"<SetVar Name=\"urn:schemas-microsoft-com:office:office#{(field == "order" ? "order0" : field)}\">{value}</SetVar>");
+                //    //batchCreate.Append($"<SetVar Name=\"{field}\">{value}</SetVar>");
+                //}     
                 batchCreate.Append("</Method>");
                 methodId++;
             }
@@ -91,6 +113,28 @@ namespace TimerJobExample.TimerJobs
             var batchString = batchCreate.ToString();
             var result = web.ProcessBatchData(batchString);
             Console.WriteLine(result);
+        }
+
+        private IEnumerable<string> GetNonSystemFieldsNames(SPList mapFrom, SPList mapTo)
+        {
+            var result = new List<(string, SPFieldType)>();
+            foreach (SPField field in mapFrom.Fields)
+            {
+                if (!field.Hidden && !field.ReadOnlyField && !field.FromBaseType)
+                {
+                    var findedField = mapTo.Fields[field.ToString()];
+                    yield return findedField.InternalName;
+                }
+            }
+        }
+
+        private IEnumerable<string> GetNonSystemFieldsNames(SPList list)
+        {
+            foreach (SPField field in list.Fields)
+            {
+                if (!field.Hidden && !field.ReadOnlyField && !field.FromBaseType)
+                    yield return field.EntityPropertyName;
+            }
         }
 
         private void CleanList(SPWeb web, SPList ordersList, SPList orderBackupList)
@@ -152,7 +196,7 @@ namespace TimerJobExample.TimerJobs
             SPListProcessing.CleanList(orderBackupList, web);
 
             // Создание бэкапа
-            BatchCreateOrders(backupItems, web, orderBackupList);
+            BatchCreateOrders(backupItems, web, orderBackupList, ordersList);
 
             // Удаление заказов
             //SPListProcessing.BatchDeleteItems(cleanItems, web);
