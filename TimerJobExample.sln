@@ -13,7 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CacheExample", "CacheExampl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CacheExample", "Cache\CacheExample\CacheExample.csproj", "{08C2A7B3-5E8A-4DE6-AEE4-5D1CF750B9B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CacheExample.Test", "CacheExample.Test\CacheExample.Test.csproj", "{21BB04A0-1E71-43A7-A4E9-475010D4AAAD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CacheExample.Test", "Cache\CacheExample.Test\CacheExample.Test.csproj", "{21BB04A0-1E71-43A7-A4E9-475010D4AAAD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

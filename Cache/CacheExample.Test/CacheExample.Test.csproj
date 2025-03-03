@@ -59,7 +59,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Cache\CacheExample\CacheExample.csproj">
+    <ProjectReference Include="..\CacheExample\CacheExample.csproj">
       <Project>{08c2a7b3-5e8a-4de6-aee4-5d1cf750b9b2}</Project>
       <Name>CacheExample</Name>
     </ProjectReference>
