@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="c1101d0f-bdce-4792-994b-c8fb0ae53a82" solutionId="c1101d0f-bdce-4792-994b-c8fb0ae53a82" resetWebServer="false" sharePointProductVersion="15.0" name="CheckScopes" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel">
+  <projectItems>
+    <projectItemReference itemId="3450f0c9-00c3-45a2-bb27-072941467e59" />
+  </projectItems>
+</package>
