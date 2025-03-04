@@ -1,11 +1,13 @@
 ﻿using CheckScopes.Common;
 using CheckScopes.Dtos;
 using System.Collections.Generic;
+using System.ServiceModel;
 using System.ServiceModel.Activation;
 
 namespace CheckScopes.ISAPI
 {
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Required)]
+    //[ServiceBehavior(InstanceContextMode = InstanceContextMode, UseSynchronizationContext = false)]
     public class CheckScopesService : ICheckScopesService
     {
         public ScopeInfoOut GetScopeInfoSingleton()

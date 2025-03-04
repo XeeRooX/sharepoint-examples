@@ -9,7 +9,7 @@ using System.Linq;
 namespace CacheExample.Test.Cache
 {
     [TestClass]
-    public class MemcachedContext
+    public class MemcachedContextTest
     {
         private CacheContextBuilder builder;
         [TestInitialize]
@@ -32,6 +32,7 @@ namespace CacheExample.Test.Cache
         {
             int countInstance = 10;
             var guidList = new List<string>();
+            var guidList2 = new List<string>();
 
             for (int i = 0; i < countInstance; i++)
             {
@@ -39,6 +40,7 @@ namespace CacheExample.Test.Cache
                 {
                     var hashCode = cacheContext.GetHashCode().ToString();
                     Console.WriteLine(hashCode);
+                    cacheContext.
                     guidList.Add(hashCode);
                 }
             }

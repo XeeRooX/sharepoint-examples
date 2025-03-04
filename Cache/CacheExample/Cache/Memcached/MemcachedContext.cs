@@ -9,8 +9,8 @@ namespace CacheExample.Cache.Memcached
 {
     public class MemcachedContext : CacheContext
     {
-        private static  MemcachedClient _client;
-        private static  MemcachedContext _instance;
+        private static MemcachedClient _client;
+        private static MemcachedContext _instance;
         private static readonly object _lock = new object();
 
         private MemcachedContext()
