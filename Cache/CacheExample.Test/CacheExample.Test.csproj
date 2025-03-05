@@ -53,10 +53,12 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Cache\MemcachedContext.cs" />
+    <Compile Include="Cache\MemcachedContextTests.cs" />
+    <Compile Include="Cache\MemcachedContextTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

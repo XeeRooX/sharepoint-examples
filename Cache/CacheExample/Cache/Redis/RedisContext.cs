@@ -9,28 +9,30 @@ namespace CacheExample.Cache.Redis
     {
         private static ConnectionMultiplexer _multiplexer;
         private static IDatabase _db;
-        private static RedisContext _instance;
+        private static string _configurationString;
         private static readonly object _lock = new object();
-        private RedisContext()
+        public RedisContext(string configurationString)
         {
+            InstanceMultiplexer(configurationString);
         }
+        private static bool ConfigurationIsUpdated(string configurationString) => configurationString != _configurationString;
 
-        public static RedisContext Instance(ConfigurationOptions configuration)
+        private static void InstanceMultiplexer(string configurationString)
         {
-            if (_instance == null)
+            if (_multiplexer == null || ConfigurationIsUpdated(configurationString))
             {
                 lock (_lock)
                 {
-                    if (_instance == null)
+                    if (_multiplexer == null)
                     {
-                        _instance = new RedisContext();
+                        var configuration = ConfigurationOptions.Parse(configurationString);
+
                         _multiplexer = ConnectionMultiplexer.Connect(configuration);
                         _db = _multiplexer.GetDatabase();
+                        _configurationString = configurationString;
                     }
                 }
             }
-
-            return _instance;
         }
 
         public override void Dispose()

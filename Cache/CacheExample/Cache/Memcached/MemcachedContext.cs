@@ -9,29 +9,28 @@ namespace CacheExample.Cache.Memcached
 {
     public class MemcachedContext : CacheContext
     {
-        private static MemcachedClient _client;
-        private static MemcachedContext _instance;
+        protected static MemcachedClient _client;
+        private static MemcachedClientConfiguration _configuration;
         private static readonly object _lock = new object();
 
-        private MemcachedContext()
+        public MemcachedContext(MemcachedClientConfiguration configuration)
         {
+            InstanceClient(configuration);
         }
-
-        public static MemcachedContext Instance(MemcachedClientConfiguration configuration)
+        private static bool ConfigurationIsUpdated(MemcachedClientConfiguration configuration) => !_configuration.IsEqual(configuration);
+        public static void InstanceClient(MemcachedClientConfiguration configuration)
         {
-            if (_instance == null)
+            if (_client == null || ConfigurationIsUpdated(configuration))
             {
                 lock (_lock)
                 {
-                    if (_instance == null)
+                    if (_client == null || ConfigurationIsUpdated(configuration))
                     {
-                        _instance = new MemcachedContext();
                         _client = new MemcachedClient(configuration);
+                        _configuration = configuration;
                     }
                 }
             }
-
-            return _instance;
         }
         public override string Get(string key)
         {  

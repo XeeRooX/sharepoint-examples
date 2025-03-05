@@ -26,39 +26,25 @@ namespace CacheExample
 
         static void MemcachedExample(string server)
         {
-            var builder = new CacheContextBuilder()
-                .ConfigureInitializer(conf =>
-                {
-                    var memcachedConfiguration = new MemcachedClientConfiguration();
-                    memcachedConfiguration.AddServer(server);
-                    return conf.UseMemcached(memcachedConfiguration);
-                });
+            var memcachedConfiguration = new MemcachedClientConfiguration();
+            memcachedConfiguration.AddServer(server);
+            CacheContext cacheContext = new MemcachedContext(memcachedConfiguration);
 
-            using (var cacheContext = builder.Build())
-            {
-                cacheContext.Set("key", "value", TimeSpan.FromSeconds(5));
-                var value = cacheContext.Get("key");
-                Console.WriteLine($"Memcached: {value}");
-            }
+            cacheContext.Set("key", "value", TimeSpan.FromSeconds(5));
+            var value = cacheContext.Get("key");
+
+            Console.WriteLine($"Memcached: {value}");
         }
 
         static void RedisExample(string server, string password)
         {
-            var builder = new CacheContextBuilder()
-                .ConfigureInitializer(conf =>
-                {
-                    var redisConfiguration = ConfigurationOptions.Parse(server);
-                    redisConfiguration.Password = password;
-                    return conf.UseRedis(redisConfiguration);
-                });
+            var redisConfiguration = $"{server},password={password}";
+            CacheContext cacheContext = new RedisContext(redisConfiguration);
 
-            using (var cacheContext = builder.Build())
-            {
-                cacheContext.Set("key", "value", expiry: TimeSpan.FromSeconds(5));
-                var value = cacheContext.Get("key");
+            cacheContext.Set("key", "value", expiry: TimeSpan.FromSeconds(5));
+            var value = cacheContext.Get("key");
 
-                Console.WriteLine($"Redis: {value}");
-            }
+            Console.WriteLine($"Redis: {value}");
         }
     }
 }
